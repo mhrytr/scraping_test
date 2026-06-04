@@ -2,12 +2,14 @@ name: Auto Scraping
 
 on:
   schedule:
-    # 毎日 日本時間の午前9時（UTCの深夜0時）に実行
-    - cron: '0 0 * * *'
-  workflow_dispatch: # 手動でテスト実行するためのボタンを表示
+    # 15分ごとに実行
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # 手動実行ボタン
 
 permissions:
   contents: write
+
+# (以降の jobs: から下は変更なしでそのまま残します)
 
 jobs:
   run-scraping:
