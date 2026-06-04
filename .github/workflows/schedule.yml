@@ -1,0 +1,39 @@
+name: Auto Scraping
+
+on:
+  schedule:
+    # 毎日 日本時間の午前9時（UTCの深夜0時）に実行
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 手動でテスト実行するためのボタンを表示
+
+permissions:
+  contents: write
+
+jobs:
+  run-scraping:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: リポジトリのコードを取得
+      uses: actions/checkout@v3
+
+    - name: Pythonの準備
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: 必要なライブラリのインストール
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests pandas
+
+    - name: プログラムの実行
+      run: python fetch_data.py
+
+    - name: 取得したCSVデータを保存（上書き）
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git add sample_data.csv
+        git commit -m "自動取得データを更新" || echo "変更なし"
+        git push
