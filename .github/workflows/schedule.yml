@@ -4,12 +4,10 @@ on:
   schedule:
     # 15分ごとに実行
     - cron: '*/15 * * * *'
-  workflow_dispatch: # 手動実行ボタン
+  workflow_dispatch: # 手動でテスト実行するためのボタンを表示
 
 permissions:
   contents: write
-
-# (以降の jobs: から下は変更なしでそのまま残します)
 
 jobs:
   run-scraping:
@@ -17,10 +15,10 @@ jobs:
 
     steps:
     - name: リポジトリのコードを取得
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4  # ← v3からv4（最新）に更新！
 
     - name: Pythonの準備
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5  # ← v4からv5（最新）に更新！
       with:
         python-version: '3.x'
 
@@ -36,6 +34,6 @@ jobs:
       run: |
         git config --global user.name "GitHub Action"
         git config --global user.email "action@github.com"
-        git add sample_data.csv
+        git add .  # ← どの名前のCSVファイルができても全て保存するように変更
         git commit -m "自動取得データを更新" || echo "変更なし"
         git push
